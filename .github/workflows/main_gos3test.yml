@@ -21,11 +21,17 @@ jobs:
       - name: Build your Go application
         run: go build -o myapp ./main.go  # Adjust the path and filename
 
-      - name: Upload artifact for deployment job
+      - name: Upload Go application artifact
         uses: actions/upload-artifact@v2
         with:
           name: go-app
           path: ./myapp
+
+      - name: Upload HTML artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: html-files
+          path: ./index.html
 
   deploy:
     runs-on: ubuntu-latest
@@ -34,10 +40,15 @@ jobs:
       name: 'Production'
 
     steps:
-      - name: Download artifact from build job
+      - name: Download Go application artifact
         uses: actions/download-artifact@v2
         with:
           name: go-app
+
+      - name: Download HTML artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: html-files
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
