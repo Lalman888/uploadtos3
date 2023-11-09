@@ -16,7 +16,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16  # Use the Go version you prefer
+          go-version: 1.23  # Use the Go version you prefer
 
       - name: Build your Go application
         run: go build -o myapp ./main.go  # Adjust the path and filename
