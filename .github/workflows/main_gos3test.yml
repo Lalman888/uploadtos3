@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: html-files
-          path: ./index.html
+          path: ./view/index.html  # Correct path to index.html
 
   deploy:
     runs-on: ubuntu-latest
