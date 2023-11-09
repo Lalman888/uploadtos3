@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy ASP.Net Core app to Azure Web App - gos3test
+name: Build and deploy Go application to Azure Web App
 
 on:
   push:
@@ -14,44 +11,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+      - name: Set up Go
+        uses: actions/setup-go@v2
         with:
-          dotnet-version: '6.0.x'
-          include-prerelease: true
+          go-version: 1.18  # Use the Go version you prefer
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Build your Go application
+        run: go build -o myapp ./main.go  # Adjust the path and filename
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
+      - name: Upload Go application artifact
+        uses: actions/upload-artifact@v2
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: go-app
+          path: ./myapp
+
+      - name: Upload HTML artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: html-files
+          path: ./view/index.html  # Correct path to index.html
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+      - name: Download Go application artifact
+        uses: actions/download-artifact@v2
         with:
-          name: .net-app
+          name: go-app
+
+      - name: Download HTML artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: html-files
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'gos3test'
+          app-name: 'gos3test'  # Replace with your Azure Web App name
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9F280BBCF0DD4CB2BC89147AE42A05BD }}
           package: .
