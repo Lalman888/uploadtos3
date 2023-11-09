@@ -1,6 +1,6 @@
 module github.com/lalman888/uploadtos3
 
-go 1.21.1
+go 1.18
 
 require (
 	github.com/gofiber/template/html/v2 v2.0.5
